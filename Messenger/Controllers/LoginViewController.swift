@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -72,8 +73,19 @@ class LoginViewController: UIViewController {
         return button
     }()
     
+    private let googleLogInButton = GIDSignInButton()
+    private var loginObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        loginObserver = NotificationCenter.default.addObserver(forName: Notification.Name.didLogInNotification, object: nil, queue: .main,
+                                                               using: { [weak self] _ in
+                                                                guard let strongSelf = self else { return }
+                                                                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+                                                               })
+        
+        GIDSignIn.sharedInstance()?.presentingViewController = self
         
         title = "Войти"
         view.backgroundColor = .white
@@ -96,6 +108,13 @@ class LoginViewController: UIViewController {
         
         loginButton.center = view.center
         scrollView.addSubview(facebookLoginButton)
+        scrollView.addSubview(googleLogInButton)
+    }
+    
+    deinit {
+        if let observer = loginObserver {
+            NotificationCenter.default.removeObserver(loginObserver)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,7 +142,11 @@ class LoginViewController: UIViewController {
                                            y: loginButton.bottom + 10,
                                            width: scrollView.width - 60,
                                            height: 52)
-        facebookLoginButton.frame.origin.y = loginButton.bottom + 20
+        
+        googleLogInButton.frame = CGRect(x: 30,
+                                         y: facebookLoginButton.bottom + 10,
+                                         width: scrollView.width - 60,
+                                         height: 52)
         
     }
     
@@ -140,9 +163,7 @@ class LoginViewController: UIViewController {
         }
         //Log in через Firebase
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password, completion: {[weak self] authResult, error in
-            guard let strongSelf = self else {
-                return
-            }
+            guard let strongSelf = self else { return }
             
             guard let result = authResult, error == nil else {
                 print("Failed to log user with email \(email)")
@@ -199,6 +220,7 @@ extension LoginViewController: LoginButtonDelegate {
                                                          httpMethod: .get)
         
         facebookRequest.start(completionHandler: { [weak self ] _, result, error in
+            //кастим полученный result
             guard let result = result as? [String: Any], error == nil else {
                 print("Failed to make facebook graph request")
                 return
@@ -212,13 +234,12 @@ extension LoginViewController: LoginButtonDelegate {
             //разделяем имя от фамилии
             let nameComponents = userName.components(separatedBy: " ")
             
-            guard nameComponents.count == 2 else {
-                return
-            }
+            guard nameComponents.count == 2 else { return }
             
             let firstName = nameComponents[0]
             let lastName = nameComponents[1]
             
+            //проверяем существует ли такой юзер 
             DatabaseManager.shared.userExists(with: email, completion: { exists in
                 //если юзер не существует, то добавляем его в базу данных
                 if !exists {
@@ -230,7 +251,7 @@ extension LoginViewController: LoginButtonDelegate {
             //получем креды с помощью полученного токена
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
             
-            //логинмся с помощью полученных кредов
+            //логинимся с помощью полученных кредов
             FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
                 guard let strongSelf = self else { return }
                 
@@ -240,7 +261,7 @@ extension LoginViewController: LoginButtonDelegate {
                     }
                     return
                 }
-                print("Successfully logged in")
+                print("Successfuly logged in")
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
             })
         })

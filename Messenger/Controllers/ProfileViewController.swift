@@ -7,12 +7,14 @@
 
 import UIKit
 import FirebaseAuth
+import FBSDKLoginKit
+import GoogleSignIn
 
 class ProfileViewController: UIViewController {
     
     @IBOutlet var tableView: UITableView!
     
-    let data = ["Выход"]
+    let data = ["Выйти"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +51,12 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                                       style: .destructive,
                                       handler: { [weak self] _ in
                                         guard let strongSelf = self else { return }
+                                        
+                                        // Log out facebook
+                                        FBSDKLoginKit.LoginManager().logOut()
+                                        
+                                        //Google log out
+                                        GIDSignIn.sharedInstance()?.signOut()
                                         do {
                                             try FirebaseAuth.Auth.auth().signOut()
                                             
@@ -57,7 +65,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
                                             nav.modalPresentationStyle = .fullScreen
                                             strongSelf.present(nav, animated: true, completion: nil)
                                         } catch {
-                                            print("Failed to log out")
+                                            print("Failed to log out: \(error)")
                                         }
                                       }))
         actionSheet.addAction(UIAlertAction(title: "Отменить",

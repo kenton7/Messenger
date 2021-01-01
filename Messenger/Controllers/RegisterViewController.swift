@@ -196,6 +196,7 @@ class RegisterViewController: UIViewController {
         }
         //Log in через Firebase
         
+        //проверяем есть ли такой юзер
         DatabaseManager.shared.userExists(with: email, completion: { [weak self] exists in
             guard let strongSelf = self else {
                 return
@@ -203,7 +204,7 @@ class RegisterViewController: UIViewController {
             
             guard !exists else {
                 //юзер уже существует
-                strongSelf.alertUserLoginError(message: "Пользователь с таким email уже зарегестрирован")
+                strongSelf.alertUserLoginError(message: "Пользователь с таким email уже зарегистрирован")
                 return
             }
             FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password, completion: { authResult, error in
@@ -211,6 +212,7 @@ class RegisterViewController: UIViewController {
                     print("Error creating user")
                     return
                 }
+                //создаем юзера в базе данных
                 DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName,
                                                                     lastName: lastName,
                                                                     email: email))
@@ -220,7 +222,7 @@ class RegisterViewController: UIViewController {
         })
     }
     
-    func alertUserLoginError(message: String = "Вы ввели не все данные для создания аккаунта.") {
+    func alertUserLoginError(message: String = "Вы ввели не все данные для создания аккаунта") {
         let alert = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -284,6 +286,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
         present(vc, animated: true, completion: nil)
     }
     
+    //устанавливаем фото, которое выбрал юзер
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
