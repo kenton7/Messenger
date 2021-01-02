@@ -79,11 +79,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginObserver = NotificationCenter.default.addObserver(forName: Notification.Name.didLogInNotification, object: nil, queue: .main,
-                                                               using: { [weak self] _ in
-                                                                guard let strongSelf = self else { return }
-                                                                strongSelf.navigationController?.dismiss(animated: true, completion: nil)
-                                                               })
+        loginObserver = NotificationCenter.default.addObserver(forName: Notification.Name.didLogInNotification, object: nil, queue: .main, using: { [weak self] _ in
+            guard let strongSelf = self else { return }
+            strongSelf.navigationController?.dismiss(animated: true, completion: nil)
+        })
         
         GIDSignIn.sharedInstance()?.presentingViewController = self
         
@@ -113,7 +112,7 @@ class LoginViewController: UIViewController {
     
     deinit {
         if let observer = loginObserver {
-            NotificationCenter.default.removeObserver(loginObserver)
+            NotificationCenter.default.removeObserver(observer)
         }
     }
     

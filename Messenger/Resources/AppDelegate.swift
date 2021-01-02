@@ -64,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         guard let authentication = user.authentication else {
             print("Missing auth object off of google user")
-            
             return
         }
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
@@ -72,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         FirebaseAuth.Auth.auth().signIn(with: credential, completion: { authResult, error in
             guard authResult != nil, error == nil else {
-                print("failed to log in with google credentials")
+                print("Неуспешная попытка входа с кредами от Google")
                 return
             }
             print("Успешный вход через Google")

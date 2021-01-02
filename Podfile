@@ -10,5 +10,9 @@ pod 'Firebase/Auth'
 pod 'Firebase/Database'
 pod 'FBSDKLoginKit'
 pod 'GoogleSignIn'
+pod 'MessageKit'
+pod 'JGProgressHUD'
+pod 'RealmSwift'
+pod 'SDWebImage'
 
 end
