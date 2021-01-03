@@ -177,7 +177,11 @@ class LoginViewController: UIViewController {
                 print("Failed to log user with email \(email)")
                 return
             }
+            
             let user = result.user
+            
+            UserDefaults.standard.setValue(email, forKey: "email")
+            
             print("logged user \(user)")
             strongSelf.navigationController?.dismiss(animated: true, completion: nil)
         })
@@ -247,6 +251,8 @@ extension LoginViewController: LoginButtonDelegate {
                 return
             }
             
+            UserDefaults.standard.setValue(email, forKey: "email")
+            
             //проверяем существует ли такой юзер 
             DatabaseManager.shared.userExists(with: email, completion: { exists in
                 //если юзер не существует, то добавляем его в базу данных
@@ -256,7 +262,6 @@ extension LoginViewController: LoginButtonDelegate {
                                                email: email)
                     DatabaseManager.shared.insertUser(with: chatUser, completion: { success in
                         if success {
-                            
                             guard let url = URL(string: pictureUrl) else {
                                 return
                             }

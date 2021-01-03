@@ -245,7 +245,6 @@ class RegisterViewController: UIViewController {
                         })
                     }
                 })
-                
                 strongSelf.navigationController?.dismiss(animated: true, completion: nil)
             })
         })
