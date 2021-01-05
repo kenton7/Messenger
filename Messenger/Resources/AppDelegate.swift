@@ -53,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
         
         UserDefaults.standard.setValue(email, forKey: "email")
+        UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey: "name")
         
         //проверяем юзера на наличие в базе
         DatabaseManager.shared.userExists(with: email, completion: { exists in
