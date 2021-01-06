@@ -78,7 +78,7 @@
         <scene sceneID="GMe-Kg-Ope">
             <objects>
                 <navigationController id="vyY-Jb-iM3" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Профиль" id="NSb-ai-Oyy"/>
+                    <tabBarItem key="tabBarItem" title="Профиль" image="person.circle" catalog="system" id="NSb-ai-Oyy"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="qNE-xP-7xz">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -95,7 +95,7 @@
         <scene sceneID="gAj-hG-6up">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4Pb-Uz-jQY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Чаты" id="huq-FW-ghX"/>
+                    <tabBarItem key="tabBarItem" title="Чаты" image="message" catalog="system" id="huq-FW-ghX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="R51-n2-JuV">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -112,6 +112,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="message" catalog="system" width="32" height="32"/>
+        <image name="person.circle" catalog="system" width="32" height="32"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
