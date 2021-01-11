@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseDatabase
 import MessageKit
+import CoreLocation
 
 final class DatabaseManager {
     static let shared = DatabaseManager()
@@ -400,6 +401,7 @@ extension DatabaseManager {
                                       image: nil,
                                       placeholderImage: placeholder,
                                       size: CGSize(width: 300, height: 300))
+                    print("image sent")
                     kind = .photo(media)
                 } else if type == "video" {
                     //video
@@ -410,6 +412,18 @@ extension DatabaseManager {
                                       placeholderImage: placeholder,
                                       size: CGSize(width: 300, height: 300))
                     kind = .video(media)
+                } else if type == "location" {
+                    let locationComponent = content.components(separatedBy: ", ")
+                    guard let longitude = Double(locationComponent[0]),
+                          let latitude = Double(locationComponent[1]) else {
+                        print("failed to render location")
+                        return nil
+                    }
+                    print("Rendering location \(longitude) and \(latitude)")
+                    
+                    let location = Location(location: CLLocation(latitude: latitude, longitude: longitude),
+                                            size: CGSize(width: 300, height: 300))
+                    kind = .location(location)
                 } else {
                     kind = .text(content)
                 }
@@ -468,7 +482,10 @@ extension DatabaseManager {
                     message = targetUrlString
                 }
                 break
-            case .location(_):
+            case .location(let locationData):
+                let location = locationData.location
+                message = "\(location.coordinate.longitude), \(location.coordinate.latitude)"
+                print(message)
                 break
             case .emoji(_):
                 break
