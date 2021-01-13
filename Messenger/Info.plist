@@ -34,7 +34,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>156241756251156</string>
 	<key>FacebookDisplayName</key>
@@ -61,10 +61,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Please allow access to take a profile picture</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Please allow access to select a photo for your profile</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please allow access to send audio and video messages</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow access to select a photo for your profile</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

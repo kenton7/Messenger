@@ -15,5 +15,7 @@ pod 'JGProgressHUD'
 pod 'RealmSwift'
 pod 'SDWebImage'
 pod 'Firebase/Storage'
+pod 'Firebase/Analytics'
+pod 'Firebase/Crashlytics'
 
 end
